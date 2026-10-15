@@ -16,6 +16,8 @@ export default function NavItem({ href, children, className = "" }: NavItemProps
         pathname === href ||
         ( href !== "/" && pathname.startsWith(`${href}/`) )
 
+        console.log(pathname);
+
 
     return (
         <Link
