@@ -4,16 +4,22 @@ import { MongoClient } from "mongodb";
 
 const mongoUri = process.env.MONGO_BETTERAUTH_URI;
 
-if(!mongoUri) {
+const githubClientId = process.env.GITHUB_CLIENT_ID
+const githubClientSecret = process.env.GITHUB_CLIENT_SECRET
+
+const googleClientId = process.env.GOOGLE_CLIENT_ID
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET
+
+if (!mongoUri) {
     throw new Error("MONGO_BETTERAUTH_URI is not defined");
 }
 
 const client = new MongoClient(mongoUri);
 const db = client.db();
 
-export const auth =  betterAuth({
+export const auth = betterAuth({
 
-    database: mongodbAdapter( db , {
+    database: mongodbAdapter(db, {
         client
     }),
 
@@ -23,15 +29,36 @@ export const auth =  betterAuth({
 
     socialProviders: {
 
-        github: {
-            clientId: "",
-            clientSecret: ""
-        },
+        // Only add GitHub auth if both the client ID and secret are actually set in the environment.
+        // If they are missing, the spread operator (...) safely ignores the empty object so the app doesn't crash.
+        ...(
+            githubClientId && githubClientSecret
 
-        google: {
-            clientId: "",
-            clientSecret: "",        
-        }
+                ? {
+                    github: {
+                        clientId: githubClientId,
+                        clientSecret: githubClientSecret,
+                    }
+                }
+
+                : {}
+        ),
+
+
+        // Same logic for Google—dynamically inject the provider config only if we have the credentials.
+        // This keeps the configuration flexible for different environments (like local dev vs production).
+        ...(
+            googleClientId && googleClientSecret
+
+                ? {
+                    google: {
+                        clientId: googleClientId,
+                        clientSecret: googleClientSecret,
+                    }
+                }
+
+                : {}
+        )
 
     }
 })
