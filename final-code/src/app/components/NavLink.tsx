@@ -1,10 +1,6 @@
-'use client'
-import { usePathname } from 'next/navigation'
 import NavItem from './NavItem';
 
 const NavLinks = () => {
-
-    const pathname = usePathname();
 
     return (
         <>

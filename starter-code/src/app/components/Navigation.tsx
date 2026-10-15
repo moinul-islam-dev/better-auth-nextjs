@@ -1,15 +1,8 @@
-"use client";
-
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { FaUnlockAlt } from "react-icons/fa";
+import NavLinks from "./NavLink";
 
 export default function Navigation() {
-  const pathname = usePathname();
-
-  const isActive = (path: string) => {
-    return pathname === path;
-  };
 
   return (
     <header className="bg-white backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
@@ -25,30 +18,7 @@ export default function Navigation() {
           </Link>
 
           <nav className="flex items-center space-x-6">
-            <Link
-              href="/"
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                isActive("/")
-                  ? "text-indigo-600 bg-indigo-50"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              Home
-            </Link>
-
-            <Link
-              href="/dashboard"
-              className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
-            >
-              Dashboard
-            </Link>
-
-            <Link
-              href="/auth"
-              className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
-            >
-              Sign In
-            </Link>
+            <NavLinks />
           </nav>
         </div>
       </div>
