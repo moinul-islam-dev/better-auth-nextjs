@@ -78,8 +78,8 @@ The goal is to understand how authentication works, why each step matters, and h
 │   ├── src/
 │   ├── public/
 │   ├── package.json
-│   ├── biome.json
-│   └── README.md
+│   └── biome.json
+│
 ├── final-code/
 │   ├── src/
 │   ├── public/
@@ -101,8 +101,6 @@ Use this project to study the completed implementation and compare it with your 
 
 ## 📦 Prerequisites
 
-- [Node.js](https://nodejs.org/)
-- npm
 - A [MongoDB Atlas](https://www.mongodb.com/products/platform/atlas-database) cluster or a local MongoDB instance
 - Google OAuth credentials, if using Google sign-in
 - GitHub OAuth credentials, if using GitHub sign-in
