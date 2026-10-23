@@ -20,6 +20,8 @@ export default function Navigation() {
           <nav className="flex items-center space-x-6">
             <NavLinks />
           </nav>
+
+          
         </div>
       </div>
     </header>

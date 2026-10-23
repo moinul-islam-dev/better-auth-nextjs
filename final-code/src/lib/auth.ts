@@ -1,8 +1,14 @@
 import { mongodbAdapter } from "@better-auth/mongo-adapter";
 import { betterAuth } from "better-auth";
+import { nextCookies } from "better-auth/next-js";
 import { MongoClient } from "mongodb";
 
 const mongoUri = process.env.MONGO_BETTERAUTH_URI;
+
+
+if (!mongoUri) {
+    throw new Error("MONGO_BETTERAUTH_URI is not defined");
+}
 
 const githubClientId = process.env.GITHUB_CLIENT_ID
 const githubClientSecret = process.env.GITHUB_CLIENT_SECRET
@@ -10,12 +16,8 @@ const githubClientSecret = process.env.GITHUB_CLIENT_SECRET
 const googleClientId = process.env.GOOGLE_CLIENT_ID
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET
 
-if (!mongoUri) {
-    throw new Error("MONGO_BETTERAUTH_URI is not defined");
-}
-
 const client = new MongoClient(mongoUri);
-const db = client.db();
+const db = client.db("nextjs-better-auth-tutorial");
 
 export const auth = betterAuth({
 
@@ -60,5 +62,7 @@ export const auth = betterAuth({
                 : {}
         )
 
-    }
+    },
+
+    plugins: [nextCookies()],
 })

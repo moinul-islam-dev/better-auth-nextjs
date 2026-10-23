@@ -2,13 +2,16 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 
+
 export interface NavItemProps {
     href: string;
     children: React.ReactNode;
     className?: string;
 }
 
-export default function NavItem({ href, children, className = "" }: NavItemProps) {
+
+const NavItem = ({ href, children, className = "" }: NavItemProps) => {
+    
     
 
     const pathname = usePathname();
@@ -33,3 +36,5 @@ export default function NavItem({ href, children, className = "" }: NavItemProps
         </Link>
     )
 }
+
+export default NavItem;

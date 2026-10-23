@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -18,6 +18,8 @@ import {
   TextArea,
   TextField,
 } from "@heroui/react";
+import { singIn, singUp, signInSocial } from "@/lib/actions/auth-actions";
+
 
 export default function AuthClientPage() {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -36,7 +38,17 @@ export default function AuthClientPage() {
     setError("");
 
     try {
-      console.log("Logged in with", provider);
+      // console.log("Logged in with", provider);
+
+      // const result = await signInSocial(provider)
+      const url = await signInSocial(provider);
+
+      window.location.assign(url);
+
+      // if (!result.user) {
+      //   setError("Invalid email or password");
+      // }
+
     } catch (err) {
       setError(
         `Error authenticating with ${provider}: ${err instanceof Error ? err.message : "Unknown error"
@@ -54,14 +66,29 @@ export default function AuthClientPage() {
 
     try {
       if (isSignIn) {
-        console.log("Signed in");
+        // console.log("Signed in");
+        const result = await singIn({ email, password });
+
+        if (!result.user) {
+          setError("Invalid email or password");
+        }
+
       } else {
-        console.log("Signed up");
+        // console.log("Signed up");
+        const result = await singUp({ name, email, password });
+
+        if (!result.user) {
+          setError("Failed to create account");
+        }
       }
+
+      router.replace("/dashboard");
+      router.refresh();
+
+
     } catch (err) {
       setError(
-        `Authentication error: ${err instanceof Error ? err.message : "Unknown error"
-        }`,
+        `Authentication error: ${err instanceof Error ? err.message : "Unknown error" }`,
       );
     } finally {
       setIsLoading(false);
