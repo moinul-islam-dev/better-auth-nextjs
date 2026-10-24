@@ -1,9 +1,22 @@
 "use client";
 import { signOut } from "@/lib/actions/auth-actions";
+import { email } from "better-auth";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-export default function DashboardClientPage() {
+interface CurrentUser {
+  name: string;
+  email: string;
+  id: string;
+  image?: string | null;
+}
+
+interface DashboardClientProps {
+  user: CurrentUser;
+}
+
+export default function DashboardClientPage({ user }: DashboardClientProps ) {
   const router = useRouter();
 
   // Redirect to auth if not authenticated
@@ -13,6 +26,11 @@ export default function DashboardClientPage() {
     router.push("/auth")
 
   };
+
+  const name = user.name?.trim() || "User";
+  const email = user.email?.trim() || "User";
+  const id = user.id?.trim() || "User";
+  const image = user.image?.trim();
 
   return (
     <div className="min-h-screen bg-linear-to-br from-blue-50 to-indigo-100">
@@ -31,18 +49,26 @@ export default function DashboardClientPage() {
               </div>
               <div className="flex items-center space-x-3">
                 <div className="flex items-center space-x-3">
-                  <img
-                    className="h-10 w-10 rounded-full"
-                    src={
-                      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
-                    }
-                  />
+                  {image ? (
+                    <Image
+                      src={image}
+                      alt={`${name}'s profile`}
+                      width={36}
+                      height={36}
+                      className="h-9 w-9 rounded-full border border-gray-200 object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-green-100 text-sm font-bold uppercase text-green-700">
+                      {name !== "User" ? name.charAt(0) : "U"}
+                    </div>
+                  )}
                   <div className="text-sm">
-                    <p className="text-gray-900 font-medium">John Doe</p>
-                    <p className="text-gray-500">email@gmail.com</p>
+                    <p className="text-gray-900 font-medium">{name}</p>
+                    <p className="text-gray-500">{email}</p>
                   </div>
                 </div>
                 <button
+                  type={"button"}
                   onClick={handleSignOut}
                   className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
                 >
@@ -67,16 +93,16 @@ export default function DashboardClientPage() {
                   <span className="font-medium text-blue-700">Provider:</span>
                   <span className="ml-2 text-blue-600">Better-Auth</span>
                 </div>
-                <div>
+                {/* <div>
                   <span className="font-medium text-blue-700">User ID:</span>
-                  <span className="ml-2 text-blue-600">1234566</span>
-                </div>
-                <div>
+                  <span className="ml-2 text-blue-600">{id}</span>
+                </div> */}
+                {/* <div>
                   <span className="font-medium text-blue-700">
                     Email Verified:
                   </span>
                   <span className="ml-2 text-blue-600">Yes</span>
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -85,6 +111,7 @@ export default function DashboardClientPage() {
               <div className="bg-gray-50 rounded-lg p-6">
                 <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
                   <svg
+                    aria-hidden="true"
                     className="w-6 h-6 text-indigo-600"
                     fill="none"
                     stroke="currentColor"
@@ -110,6 +137,7 @@ export default function DashboardClientPage() {
               <div className="bg-gray-50 rounded-lg p-6">
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
                   <svg
+                    aria-hidden="true"
                     className="w-6 h-6 text-green-600"
                     fill="none"
                     stroke="currentColor"
@@ -134,6 +162,7 @@ export default function DashboardClientPage() {
               <div className="bg-gray-50 rounded-lg p-6">
                 <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
                   <svg
+                    aria-hidden="true"
                     className="w-6 h-6 text-purple-600"
                     fill="none"
                     stroke="currentColor"
@@ -164,18 +193,21 @@ export default function DashboardClientPage() {
               </h3>
               <div className="flex flex-wrap gap-3">
                 <button
+                  type="button"
                   onClick={() => alert("Mock action: Profile updated!")}
                   className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
                 >
                   Update Profile
                 </button>
                 <button
+                  type="button"
                   onClick={() => alert("Mock action: Settings saved!")}
                   className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
                 >
                   Save Settings
                 </button>
                 <button
+                  type="button"                  
                   onClick={() => alert("Mock action: Data exported!")}
                   className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
                 >
